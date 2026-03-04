@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import styles from './style/Signup.module.css';
 import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../api/axiosInstance';
+import { useDispatch, useSelector } from 'react-redux';
+import { registerUser } from '../store/slices/authSlice';
 
 // Ikon Utility
 const EyeIcon = () => (
@@ -34,6 +36,10 @@ const GoogleIcon = () => (
 
 const Signup = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const { isLoading } = useSelector((state) => state.auth);
+
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -79,7 +85,7 @@ const Signup = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     
     // Validasi akhir sebelum submit
@@ -99,8 +105,17 @@ const Signup = () => {
       password: formData.password
     };
 
-    console.log("Data siap dikirim ke backend Express:", payload);
-    alert("Registrasi sukses di-simulasikan!");
+    try {
+      // Eksekusi API melalui Redux Thunk
+      await dispatch(registerUser(payload)).unwrap();
+      
+      alert("Akun berhasil dibuat! Silakan login.");
+      navigate('/login'); // Lempar ke halaman login jika sukses
+      
+    } catch (err) {
+      // Munculkan pesan error dari Express (misal: "Username sudah terdaftar")
+      alert(err || "Registrasi gagal.");
+    }
   };
 
   // Helper untuk menentukan warna bar dan label berdasarkan skor (0-5)
@@ -215,8 +230,12 @@ const Signup = () => {
             {showMatchError && <div className={styles.errorText}>Passwords do not match</div>}
           </div>
 
-          <button type="submit" className={styles.submitBtn} disabled={!isFormValid}>
-            Create Account
+          <button 
+            type="submit" 
+            className={styles.submitBtn} 
+            disabled={!isFormValid || isLoading}
+          >
+            {isLoading ? 'Creating Account...' : 'Create Account'}
           </button>
         </form>
 

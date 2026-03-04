@@ -63,6 +63,7 @@ const login = async (req, res, next) => {
             message: "User logged in successfully",
             token,
             user: {
+                fullname: user.fullname,
                 username: user.username,
                 role: user.role
             }

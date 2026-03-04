@@ -118,13 +118,13 @@
 /* Menu Dropdown */
 .dropdown {
   position: absolute;
-  top: 120%; /* Tepat di bawah profil */
+  top: 120%; 
   right: 0;
   background-color: white;
   border: 1px solid var(--border-light);
-  border-radius: 16px;
+  border-radius: 12px; /* Sedikit lebih kotak agar elegan */
   padding: 8px 0;
-  min-width: 160px;
+  min-width: 220px; /* Diperlebar agar nama/role muat */
   box-shadow: 0 10px 25px -5px rgba(41, 115, 178, 0.1);
   display: flex;
   flex-direction: column;
@@ -132,10 +132,40 @@
   overflow: hidden;
 }
 
-.dropdownItem {
+/* Header Dropdown (Nama & Role) */
+.dropdownHeader {
   padding: 12px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.dropdownName {
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--text-main);
+}
+
+.dropdownRole {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+/* Garis Pembatas */
+.dropdownDivider {
+  height: 1px;
+  background-color: var(--border-light);
+  margin: 4px 0;
+}
+
+/* Item Dropdown */
+.dropdownItem {
+  display: flex;
+  align-items: center; /* Menyejajarkan ikon dan teks */
+  gap: 12px;
+  padding: 10px 20px;
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 500;
   color: var(--text-main);
   text-decoration: none;
   background: none;
@@ -149,15 +179,23 @@
 
 .dropdownItem:hover {
   background-color: var(--bg-cream);
-  color: var(--primary-dark);
 }
 
-/* Khusus Tombol Logout dibuat warna merah */
+.menuIcon {
+  width: 18px;
+  height: 18px;
+  color: var(--text-muted); /* Warna ikon standar */
+}
+
+/* Khusus Tombol Logout */
 .logoutBtn {
   color: #ef4444; 
 }
 
+.logoutBtn .menuIcon {
+  color: #ef4444; /* Ikon logout juga ikut merah */
+}
+
 .logoutBtn:hover {
   background-color: #fef2f2;
-  color: #dc2626;
 }

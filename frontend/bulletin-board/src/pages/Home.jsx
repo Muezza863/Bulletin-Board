@@ -3,9 +3,11 @@ import styles from './style/Home.module.css';
 import Navbar from '../components/Navbar';
 import PostCard from '../components/PostCard';
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 const Home = () => {
   const navigate = useNavigate();
+  const { token } = useSelector((state) => state.auth);
   // Data dummy yang sama persis dengan desain Anda
   const dummyPost = {
     userName: 'Elena Vance',
@@ -32,10 +34,16 @@ const Home = () => {
           A space for clean, minimal, and meaningful discussions. Join our community today.
         </p>
         
-        <div>
-          <button onClick={() => navigate('/login')} className={styles.btnPrimary}>Start Posting</button>
-          <button className={styles.btnSecondary}>Learn More</button>
-        </div>
+        {!token && (
+          <div>
+            <button onClick={() => navigate('/login')} className={styles.btnPrimary}>
+              Start Posting
+            </button>
+            <button className={styles.btnSecondary}>
+              Learn More
+            </button>
+          </div>
+        )}
       </section>
 
       <main className={styles.feedContainer}>
