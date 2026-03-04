@@ -6,21 +6,26 @@ export const loginUser = createAsyncThunk(
   'auth/loginUser',
   async (credentials, { rejectWithValue }) => {
     try {
-      // Menembak endpoint Express Anda
       const response = await axiosInstance.post('/login', credentials);
       
-      // Simpan token ke localStorage jika ada
-      if (response.data.token) {
-        localStorage.setItem('token', response.data.token);
+      // Jika request sukses (200 OK) tapi backend tidak mengirimkan token
+      if (!response.data.token) {
+        return rejectWithValue(response.data.message || 'Username atau password salah.');
       }
-      
-      return response.data; // Ini akan menjadi 'action.payload' jika sukses
+
+      // Jika sukses dan token ada, simpan ke localStorage
+      localStorage.setItem('token', response.data.token);
+      return response.data; 
+
     } catch (error) {
-      // Menangkap pesan error dari Express
-      return rejectWithValue(error.response?.data?.message || 'Login gagal. Silakan coba lagi.');
+      // Menangkap error dari backend (seperti 401, 404, atau 500) maupun error koneksi
+      return rejectWithValue(
+        error.response?.data?.message || 'Koneksi ke server gagal. Silakan coba lagi.'
+      );
     }
   }
 );
+
 
 // 2. Setup Initial State
 const initialState = {

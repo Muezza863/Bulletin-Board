@@ -4,9 +4,14 @@ import router from "./route/route.js";
 import * as middleware from "./middleware/index.js";
 import swaggerUi from 'swagger-ui-express';
 import specs from './configurations/swagger.js';
+import cors from "cors";
 
 const app = express();
 
+app.use(cors({
+    origin: "http://localhost:5173",
+    credentials: true
+}));
 app.use(express.json());
 app.use(express.urlencoded());
 

@@ -84,3 +84,80 @@
   cursor: pointer;
   transition: background-color 0.2s;
 }
+
+/* --- Bagian User Profile & Dropdown --- */
+.userInfo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  position: relative;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 9999px;
+  transition: background-color 0.2s;
+}
+
+.userInfo:hover {
+  background-color: var(--bg-cream);
+}
+
+.userName {
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--primary-dark);
+}
+
+.userAvatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--primary-teal);
+}
+
+/* Menu Dropdown */
+.dropdown {
+  position: absolute;
+  top: 120%; /* Tepat di bawah profil */
+  right: 0;
+  background-color: white;
+  border: 1px solid var(--border-light);
+  border-radius: 16px;
+  padding: 8px 0;
+  min-width: 160px;
+  box-shadow: 0 10px 25px -5px rgba(41, 115, 178, 0.1);
+  display: flex;
+  flex-direction: column;
+  z-index: 100;
+  overflow: hidden;
+}
+
+.dropdownItem {
+  padding: 12px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-main);
+  text-decoration: none;
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  width: 100%;
+  font-family: inherit;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.dropdownItem:hover {
+  background-color: var(--bg-cream);
+  color: var(--primary-dark);
+}
+
+/* Khusus Tombol Logout dibuat warna merah */
+.logoutBtn {
+  color: #ef4444; 
+}
+
+.logoutBtn:hover {
+  background-color: #fef2f2;
+  color: #dc2626;
+}

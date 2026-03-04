@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import styles from './style/Login.module.css';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { loginUser } from '../store/slices/authSlice';
 
 // Ikon Google
 const GoogleIcon = () => (
@@ -32,6 +34,38 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
+  const dispatch = useDispatch();
+  const { isLoading, error } = useSelector((state) => state.auth);
+
+  const [formData, setFormData] = useState({
+    username: "",
+    password: "",
+  });
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      // .unwrap() memungkinkan kita menangkap hasil sukses (resolve) atau gagal (reject) secara langsung
+      const result = await dispatch(loginUser(formData)).unwrap();
+      
+      // Jika berhasil dan memiliki token, arahkan ke halaman utama
+      if (result.token) {
+        alert('Login Berhasil!');
+        navigate('/'); 
+      }
+    } catch (err) {
+      // err secara otomatis akan berisi string pesan dari rejectWithValue di authSlice
+      alert(err);
+    }
+  };
   // Fungsi untuk membalikkan state (true jadi false, false jadi true)
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -50,6 +84,9 @@ const Login = () => {
           <div className={styles.formGroup}>
             <label className={styles.label}>Username</label>
             <input 
+              name="username"
+              value={formData.username}
+              onChange={handleChange}
               type="text" 
               className={styles.input} 
               placeholder="Enter your username" 
@@ -68,6 +105,9 @@ const Login = () => {
                 className={`${styles.input} ${styles.passwordInput}`} 
                 placeholder="Enter your password" 
                 required
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
               />
               <button 
                 type="button" 
@@ -81,8 +121,8 @@ const Login = () => {
 
           </div>
 
-          <button type="submit" className={styles.loginBtn}>
-            Sign In
+          <button type="submit" className={styles.loginBtn} disabled={isLoading} onClick={handleSubmit}>
+            {isLoading ? 'Signing In...' : 'Sign In'}
           </button>
           
           <button onClick={() => navigate('/')} type="button" className={styles.cancelBtn}>
