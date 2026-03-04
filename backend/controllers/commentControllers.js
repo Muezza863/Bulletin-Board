@@ -2,7 +2,7 @@ import { Comment } from "../models/index.js";
 
 
 // @desc    Get comment by post id
-// @route   GET /api/comment/:postId
+// @route   GET /api/post/:postId/comment
 // @access  Private
 const getCommentByPostId = async (req, res, next) => {
     try {
@@ -29,7 +29,7 @@ const getCommentByPostId = async (req, res, next) => {
 
 
 // @desc    Create comment
-// @route   POST /api/comment/:postId
+// @route   POST /api/post/:postId/comment
 // @access  Private
 const createComment = async (req, res, next) => {
     try {

@@ -7,10 +7,11 @@ const router = express.Router();
 
 // Auth routes
 router.post("/register", middleware.authLimiter, controllers.register);
-router.post("/login", middleware.authLimiter, middleware.checkAccountStatus, controllers.login);
+router.post("/login", middleware.authLimiter, controllers.login);
 
 
 router.use(middleware.protect);
+router.use(middleware.checkAccountStatus);
 // Post routes
 router.get("/post", controllers.getAllPost);
 router.get("/post/:id", controllers.getPostById);

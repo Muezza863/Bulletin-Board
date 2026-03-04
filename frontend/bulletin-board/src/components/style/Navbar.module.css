@@ -1,0 +1,86 @@
+/* Wrapper agar Navbar bisa melayang (sticky) dan memiliki jarak dari atas */
+.navWrapper {
+  position: sticky;
+  top: 24px;
+  z-index: 100;
+  padding: 0 20px;
+}
+
+/* Ini adalah bentuk oval memanjang dengan efek blur */
+.nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 24px;
+  margin: 0 auto;
+  max-width: 900px; /* Lebar maksimal oval */
+
+  /* Efek Glassmorphism (Background Blur) */
+  background-color: rgba(255, 255, 255, 0.65); /* Putih transparan */
+  backdrop-filter: blur(5px); /* Efek blur ke background di belakangnya */
+  -webkit-backdrop-filter: blur(12px); /* Dukungan untuk browser Safari */
+
+  /* Bentuk Oval Memanjang (Pill Shape) */
+  border-radius: 9999px;
+  
+  /* Sedikit border dan shadow agar lebih menonjol */
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.08);
+}
+
+.logoWrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  /* Hapus border di logo karena navbar-nya sudah berbentuk oval */
+  padding: 4px 8px; 
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  background-color: #40C9E7;
+  border-radius: 50%;
+}
+
+.logoText {
+  font-weight: 700;
+  color: #374151;
+  font-size: 15px;
+}
+
+.navLinks {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.loginBtn {
+  background: none;
+  border: none;
+  color: #4b5563;
+  font-weight: 600;
+  font-size: 14px;
+  padding: 10px 24px;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.loginBtn:hover {
+  color:white;
+  background-color: #48A6A7;
+  padding: 10px 24px;
+  border-radius: 9999px;
+}
+
+.signupBtn {
+  background-color: #48A6A7;
+  color: white;
+  padding: 10px 24px;
+  border-radius: 9999px; /* Tombol signup juga dibikin oval penuh */
+  border: none;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}

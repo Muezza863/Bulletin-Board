@@ -1,0 +1,258 @@
+.container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Background mewarisi warna cream dari body, jadi tidak perlu diset lagi */
+  padding: 20px;
+}
+
+.card {
+  background-color: white; /* Card tetap putih agar kontras dengan background cream */
+  width: 100%;
+  max-width: 420px;
+  padding: 48px 40px;
+  border-radius: 24px;
+  box-shadow: 0 20px 25px -5px rgba(41, 115, 178, 0.1), 0 10px 10px -5px rgba(41, 115, 178, 0.04); /* Shadow menggunakan hint warna dark blue */
+  text-align: center;
+}
+
+.header {
+  margin-bottom: 32px;
+}
+
+.logoDot {
+  width: 12px;
+  height: 12px;
+  background-color: var(--primary-teal); /* Menggunakan warna #48A6A7 */
+  border-radius: 50%;
+  margin: 0 auto 12px;
+}
+
+.title {
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--primary-dark); /* Menggunakan warna #2973B2 */
+  margin: 0;
+}
+
+.subtitle {
+  color: var(--text-muted);
+  font-size: 14px;
+  margin-top: 8px;
+}
+
+.form {
+  text-align: left;
+}
+
+.formGroup {
+  margin-bottom: 20px;
+}
+
+.label {
+  display: block;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--primary-dark); /* Label menggunakan dark blue */
+  margin-bottom: 8px;
+  margin-left: 4px;
+}
+
+.passwordWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input {
+  width: 100%;
+  padding: 14px 18px;
+  border-radius: 12px;
+  border: 1px solid var(--border-light);
+  background-color: #fafafa;
+  font-size: 14px;
+  outline: none;
+  transition: all 0.2s;
+  box-sizing: border-box;
+}
+
+.passwordInput {
+  padding-right: 48px; 
+}
+
+.input:focus {
+  border-color: var(--primary-teal);
+  background-color: white;
+  box-shadow: 0 0 0 4px rgba(72, 166, 167, 0.15); /* Glow menggunakan teal */
+}
+
+.eyeBtn {
+  position: absolute;
+  right: 14px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  transition: color 0.2s;
+}
+
+.eyeBtn:hover {
+  color: var(--primary-teal); /* Ikon mata berubah jadi teal saat dihover */
+}
+
+.eyeIcon {
+  width: 20px;
+  height: 20px;
+}
+
+.loginBtn {
+  width: 100%;
+  background-color: var(--primary-dark); /* Tombol utama pakai Dark Blue */
+  color: white;
+  padding: 14px;
+  border-radius: 12px;
+  border: none;
+  font-weight: 700;
+  font-size: 15px;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: transform 0.1s, background-color 0.2s;
+}
+
+.loginBtn:hover {
+  background-color: #1f5c91; /* Sedikit digelapkan dari base dark blue */
+}
+
+.loginBtn:active {
+  transform: scale(0.98);
+}
+
+.cancelBtn {
+  width: 100%;
+  background-color: transparent;
+  color: var(--text-muted);
+  padding: 14px;
+  border-radius: 12px;
+  border: none;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  margin-top: 8px;
+}
+
+.cancelBtn:hover {
+  background-color: #ef4444; 
+  color: white; 
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  margin: 24px 0;
+  color: var(--border-light);
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.divider::before, .divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background-color: var(--border-light);
+}
+
+.divider span {
+  padding: 0 12px;
+  color: var(--text-muted);
+}
+
+.googleBtn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  background-color: white;
+  color: var(--text-main);
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid var(--border-light);
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.googleBtn:hover {
+  background-color: var(--bg-cream); /* Hover tombol google pakai warna cream */
+}
+
+.googleIcon {
+  width: 18px;
+  height: 18px;
+}
+
+.footer {
+  margin-top: 32px;
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+.signupLink {
+  color: var(--primary-teal);
+  font-weight: 700;
+  text-decoration: none;
+  margin-left: 4px;
+  cursor: pointer;
+}
+
+.signupLink:hover {
+  color: var(--primary-dark); /* Berubah dari Teal ke Dark Blue saat di-hover */
+}
+
+.signupLink:hover {
+  text-decoration: underline;
+}
+
+
+/* --- Tambahan untuk Toggle Password --- */
+.passwordWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+/* Kita timpa sedikit class .input agar teks tidak tertutup ikon di sebelah kanan */
+.passwordInput {
+  padding-right: 48px; 
+}
+
+.eyeBtn {
+  position: absolute;
+  right: 14px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #9ca3af;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  transition: color 0.2s;
+}
+
+.eyeBtn:hover {
+  color: #4b5563; /* Berubah jadi lebih gelap saat di-hover */
+}
+
+.eyeIcon {
+  width: 20px;
+  height: 20px;
+}

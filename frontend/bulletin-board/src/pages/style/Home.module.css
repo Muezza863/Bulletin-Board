@@ -1,0 +1,91 @@
+.container {
+  min-height: 100vh;
+  background-color: var(--bg-cream); /* #F2EFE7 */
+}
+
+.heroSection {
+  text-align: center;
+  padding: 80px 20px;
+}
+
+.title {
+  font-size: 3.5rem;
+  font-weight: 800;
+  color: var(--primary-dark); /* Menggunakan #2973B2 agar senada dengan palet baru */
+  margin-bottom: 16px;
+  line-height: 1.2;
+}
+
+.brand {
+  color: var(--primary-teal); /* #48A6A7 */
+}
+
+.subtitle {
+  color: var(--text-muted);
+  max-width: 450px;
+  margin: 0 auto 40px auto;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.btnPrimary {
+  background-color: var(--primary-teal); /* #48A6A7 */
+  color: white;
+  padding: 14px 32px;
+  border-radius: 12px;
+  border: none;
+  font-weight: 700;
+  cursor: pointer;
+  margin-right: 16px;
+  transition: background-color 0.2s ease;
+}
+
+.btnPrimary:hover {
+  background-color: var(--primary-dark); /* Efek hover yang elegan menggunakan biru tua */
+}
+
+.btnSecondary {
+  background-color: white;
+  color: var(--text-main);
+  padding: 14px 32px;
+  border-radius: 12px;
+  border: 1px solid var(--border-light);
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.btnSecondary:hover {
+  background-color: var(--bg-cream);
+}
+
+/* Feed Section */
+.feedContainer {
+  max-width: 650px;
+  margin: 0 auto;
+  padding: 0 20px 80px 20px;
+}
+
+.feedHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.feedTitle {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.feedTabs {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.tabActive {
+  color: var(--primary-teal); /* #48A6A7 */
+  margin-left: 16px;
+}

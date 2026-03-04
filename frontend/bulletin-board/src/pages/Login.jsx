@@ -1,0 +1,111 @@
+import React, { useState } from 'react';
+import styles from './style/Login.module.css';
+import { useNavigate } from 'react-router-dom';
+
+// Ikon Google
+const GoogleIcon = () => (
+  <svg className={styles.googleIcon} viewBox="0 0 48 48">
+    <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+    <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+    <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24s.92 7.54 2.56 10.78l7.97-6.19z"/>
+    <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+  </svg>
+);
+
+// Ikon Mata Terbuka
+const EyeIcon = () => (
+  <svg className={styles.eyeIcon} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+  </svg>
+);
+
+// Ikon Mata Dicoret (Tertutup)
+const EyeOffIcon = () => (
+  <svg className={styles.eyeIcon} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
+  </svg>
+);
+
+const Login = () => {
+  // Logic Senior: State untuk menyimpan status visibility password
+  const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
+
+  // Fungsi untuk membalikkan state (true jadi false, false jadi true)
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
+  return (
+    <div className={styles.container}>
+      <div className={styles.card}>
+        <div className={styles.header}>
+          <div className={styles.logoDot}></div>
+          <h1 className={styles.title}>Welcome Back</h1>
+          <p className={styles.subtitle}>Please enter your details to sign in</p>
+        </div>
+
+        <form className={styles.form} onSubmit={(e) => e.preventDefault()}>
+          <div className={styles.formGroup}>
+            <label className={styles.label}>Username</label>
+            <input 
+              type="text" 
+              className={styles.input} 
+              placeholder="Enter your username" 
+              required
+            />
+          </div>
+
+          <div className={styles.formGroup}>
+            <label className={styles.label}>Password</label>
+            
+            {/* Wrapper baru untuk input password dan ikon matanya */}
+            <div className={styles.passwordWrapper}>
+              <input 
+                // Jika showPassword true, tipe jadi 'text'. Jika false, tipe jadi 'password'
+                type={showPassword ? "text" : "password"} 
+                className={`${styles.input} ${styles.passwordInput}`} 
+                placeholder="Enter your password" 
+                required
+              />
+              <button 
+                type="button" 
+                className={styles.eyeBtn} 
+                onClick={togglePasswordVisibility}
+                title={showPassword ? "Sembunyikan password" : "Tampilkan password"}
+              >
+                {showPassword ? <EyeOffIcon /> : <EyeIcon />}
+              </button>
+            </div>
+
+          </div>
+
+          <button type="submit" className={styles.loginBtn}>
+            Sign In
+          </button>
+          
+          <button onClick={() => navigate('/')} type="button" className={styles.cancelBtn}>
+            Batal
+          </button>
+        </form>
+
+        <div className={styles.divider}>
+          <span>OR</span>
+        </div>
+
+        <button className={styles.googleBtn}>
+          <GoogleIcon />
+          Sign in with Google
+        </button>
+
+        <div className={styles.footer}>
+          Don't have an account? 
+          <span onClick={() => navigate('/signup')} className={styles.signupLink}>Sign up for free</span>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Login;

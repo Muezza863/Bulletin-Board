@@ -1,0 +1,123 @@
+.container {
+  min-height: 100vh;
+  background-color: var(--bg-cream);
+  padding-bottom: 80px; /* Hapus padding atas karena sekarang ada Navbar */
+}
+
+/* Beri jarak antara Navbar dan konten utama */
+.contentArea {
+  padding: 40px 20px;
+}
+
+.wrapper {
+  max-width: 900px; /* KITA REGANGKAN LEBIH LEBAR LAGI */
+  margin: 0 auto;
+}
+
+/* Tombol Kembali */
+.backBtn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  margin-bottom: 24px;
+  transition: color 0.2s;
+}
+
+.backBtn:hover {
+  color: var(--primary-teal);
+}
+
+.backIcon {
+  width: 18px;
+  height: 18px;
+}
+
+/* Area Komentar */
+.commentsSection {
+  margin-top: 32px;
+}
+
+.commentsHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding: 0 4px; /* Sedikit padding agar teks sejajar dengan batas dalam card */
+}
+
+.commentsTitle {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--primary-dark);
+}
+
+.commentsCount {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.commentList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%; /* Memastikan list mengambil ruang penuh */
+}
+
+/* Card Komentar - Mengikuti lebar wrapper */
+.commentItem {
+  display: flex;
+  gap: 16px;
+  width: 100%; /* Memaksa card selebar wrapper */
+  box-sizing: border-box; /* Agar padding tidak menambah lebar elemen */
+  background-color: white; 
+  border: 1px solid var(--border-light); 
+  border-radius: 16px; 
+  padding: 24px; /* Samakan padding dengan PostCard agar serasi */
+  box-shadow: 0 4px 6px -1px rgba(41, 115, 178, 0.03); 
+}
+
+.avatar {
+  width: 48px; /* Sedikit diperbesar agar proporsional di area yang lebar */
+  height: 48px; /* Sedikit diperbesar */
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid var(--border-light);
+  flex-shrink: 0; 
+}
+
+.commentContent {
+  flex: 1;
+}
+
+.commentHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 8px;
+}
+
+.authorName {
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--primary-dark); 
+}
+
+.commentTime {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.commentText {
+  font-size: 14px;
+  color: var(--text-main);
+  line-height: 1.6;
+  margin: 0;
+}

@@ -12,9 +12,9 @@ app.use(express.urlencoded());
 
 app.use("/uploads", express.static("uploads"));
 
-app.get("/", (req, res) => {
-    res.send("Hello World!");
-})
+// app.get("/", (req, res) => {
+//     res.send("Hello World!");
+// })
 
 app.use("/api", middleware.generalLimiter, router);
 

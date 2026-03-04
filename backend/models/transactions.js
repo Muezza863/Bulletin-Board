@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 const transactionSchema = new mongoose.Schema({
-    userId: {
+    userId: { // Harusnya transactionId
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
         required: true
@@ -24,7 +24,7 @@ const transactionSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    transactionId: {
+    transactionId: { // Harusnya userId
         type: String,
         required: true
     },
