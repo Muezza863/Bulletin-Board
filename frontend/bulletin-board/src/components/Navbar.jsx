@@ -41,6 +41,13 @@ const Navbar = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+
+  const SearchIcon = () => (
+  <svg className={styles.searchIcon} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+  </svg>
+);
+
   const handleLogout = () => {
     dispatch(logout());
     setIsDropdownOpen(false);
@@ -54,6 +61,18 @@ const Navbar = () => {
           <div className={styles.dot}></div>
           <span className={styles.logoText}>EchoBoard</span>
         </Link>
+
+        {/* --- SEARCH BAR BARU --- */}
+        <div>
+          <div className={styles.searchContainer}>
+          <SearchIcon />
+          <input 
+            type="text" 
+            placeholder="Search discussions..." 
+            className={styles.searchInput} 
+          />
+        </div>
+        </div>
         
         <div className={styles.navLinks}>
           {token ? (

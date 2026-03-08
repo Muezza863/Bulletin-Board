@@ -1,11 +1,27 @@
 .container {
   min-height: 100vh;
   background-color: var(--bg-cream); /* #F2EFE7 */
+  padding: 40px 20px 80px 20px; 
+}
+
+.mainLayout {
+  max-width: 1000px; /* Diperlebar untuk menampung sidebar */
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 240px 1fr; /* Kolom kiri 240px, kolom kanan sisanya */
+  gap: 10px;
+  align-items: start; /* Mencegah kolom melar mengikuti tinggi sebelahnya */
+}
+
+.sidebar {
+  width: 100%;
+  position: sticky;
+  top: 100px;
 }
 
 .heroSection {
   text-align: center;
-  padding: 80px 20px;
+  padding: 40px 20px;
 }
 
 .title {

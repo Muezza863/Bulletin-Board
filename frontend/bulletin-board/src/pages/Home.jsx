@@ -1,31 +1,29 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styles from './style/Home.module.css';
 import Navbar from '../components/Navbar';
 import PostCard from '../components/PostCard';
+import CategorySidebar from '../components/CategorySidebar';
 import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchPosts } from '../store/slices/postSlice';
 
 const Home = () => {
   const navigate = useNavigate();
   const { token } = useSelector((state) => state.auth);
-  // Data dummy yang sama persis dengan desain Anda
-  const dummyPost = {
-    userName: 'Elena Vance',
-    userAvatar: 'https://i.pravatar.cc/150?u=elena',
-    isPremium: true,
-    timeAgo: '2 hours ago',
-    content: 'The future of minimalist design is about intentionality. Less but better.',
-    image: 'https://images.unsplash.com/photo-1519751138087-5bf79df62d5b?auto=format&fit=crop&w=800&q=80',
-    // Tambahkan field baru ini
-    likesCount: 124, 
-    commentsCount: 12 
-  };
+  const { posts, isLoading, error } = useSelector((state) => state.post);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchPosts());
+  }, [dispatch]);
 
   return (
     <div className={styles.container}>
       <Navbar />
 
       <section className={styles.heroSection}>
+        {!token && (
+          <div>
         <h1 className={styles.title}>
           Share your thoughts with <br />
           <span className={styles.brand}>EchoBoard</span>
@@ -34,8 +32,7 @@ const Home = () => {
           A space for clean, minimal, and meaningful discussions. Join our community today.
         </p>
         
-        {!token && (
-          <div>
+        
             <button onClick={() => navigate('/login')} className={styles.btnPrimary}>
               Start Posting
             </button>
@@ -46,6 +43,11 @@ const Home = () => {
         )}
       </section>
 
+      <div className={styles.mainLayout}>
+      <aside className={styles.sidebar}>
+        <CategorySidebar />
+      </aside>
+      
       <main className={styles.feedContainer}>
         <div className={styles.feedHeader}>
           <h2 className={styles.feedTitle}>Recent Discussions</h2>
@@ -56,8 +58,27 @@ const Home = () => {
         </div>
 
         {/* Memanggil komponen PostCard dan mengirim data dummy */}
-        <PostCard post={dummyPost} />
+        <div className={styles.postList}>
+          {/* 1. Tangani status Loading */}
+            {isLoading && <p style={{ textAlign: 'center', color: 'var(--text-muted)' }}>Memuat postingan...</p>}
+            
+            {/* 2. Tangani status Error */}
+            {error && <p style={{ color: '#ef4444', textAlign: 'center' }}>{error}</p>}
+            
+            {/* 3. Render Postingan jika array tidak kosong */}
+            {!isLoading && !error && posts.length > 0 && (
+              posts.map((postData) => (
+                <PostCard key={postData.id || postData._id} post={postData} />
+              ))
+            )}
+
+            {/* 4. Jika database kosong */}
+            {!isLoading && !error && posts.length === 0 && (
+              <p style={{ textAlign: 'center', color: 'var(--text-muted)' }}>Belum ada diskusi saat ini.</p>
+            )}
+        </div>
       </main>
+      </div>
     </div>
   );
 };
