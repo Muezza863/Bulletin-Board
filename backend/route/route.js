@@ -9,13 +9,15 @@ const router = express.Router();
 router.post("/register", middleware.authLimiter, controllers.register);
 router.post("/login", middleware.authLimiter, controllers.login);
 
-
-router.use(middleware.protect);
-router.use(middleware.checkAccountStatus);
 // Post routes
 router.get("/post", controllers.getAllPost);
 router.get("/post/:id", controllers.getPostById);
 router.get("/post/category", controllers.getAllCategory);
+
+
+router.use(middleware.protect);
+router.use(middleware.checkAccountStatus);
+// Post routes
 router.get("/post/my-post", controllers.getMyPost);
 router.post("/post", middleware.checkQuota, upload.array("file", 2), controllers.createPost);
 router.put("/post/:id", middleware.checkQuota, upload.array("file", 2), controllers.updatePost);

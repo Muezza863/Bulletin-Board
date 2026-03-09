@@ -2,17 +2,19 @@ import { Post, User } from "../models/index.js";
 
 // @desc    Get all post
 // @route   GET /api/post
-// @access  Private
-const getAllPost = async (req, res, next) => {
+// @access  Public
+const getAllPost = async (req, res) => {
     try {
         const { page = 1, limit = 10, search, category } = req.query;
-        const skip = (page - 1) * limit;
 
-        const posts = await Post.find({ isDeleted: false, ...(search ? { title: { $regex: search, $options: 'i' } } : {}), ...(category ? { category: category } : {}) }).populate('userId', 'username').sort({ createdAt: -1 }).skip(skip).limit(limit);
+        // 1. Kumpulkan semua filter pencarian ke dalam satu objek (Query)
+        const query = {
+            isDeleted: false,
+            ...(search ? { title: { $regex: search, $options: 'i' } } : {}),
+            ...(category ? { category: category } : {})
+        };
 
-        const totalPosts = await Post.countDocuments({ isDeleted: false, ...(search ? { title: { $regex: search, $options: 'i' } } : {}), ...(category ? { category: category } : {}) });
-        const totalPages = Math.ceil(totalPosts / limit);
-
+        // 2. Siapkan opsi paginasi (biarkan plugin yang mengurus skip, limit, dan sort)
         const options = {
             page: parseInt(page),
             limit: parseInt(limit),
@@ -20,44 +22,70 @@ const getAllPost = async (req, res, next) => {
             populate: { path: 'userId', select: 'username' },
             customLabels: {
                 totalDocs: 'totalData',
-                docs: 'posts',
+                docs: 'posts', // Data array Anda akan masuk ke label ini
                 page: 'currentPage',
                 nextPage: 'nextPage',
                 prevPage: 'prevPage',
                 totalPages: 'totalPages'
             },
-        }
+        };
 
-        const result = await posts.paginate(options);
+        // 3. Eksekusi paginate langsung dari Model (Post), bukan dari variabel array
+        const result = await Post.paginate(query, options);
+
+        // 4. Kirim response ke React Anda
         res.status(200).json({
             data: result
         });
 
     } catch (error) {
-        console.log(error);
+        console.error("Error di getAllPost:", error);
         res.status(500).json({ message: "Internal server error" });
     }
-    next();
-}
+};
 
 // @desc    Get all category
 // @route   GET /api/post/category
-// @access  Private
-const getAllCategory = async (req, res, next) => {
+// @access  Public
+const getAllCategory = async (req, res) => {
     try {
-        const categories = await Post.distinct('category');
+        const categories = await Post.aggregate([
+            {
+                // 1. Hanya hitung postingan yang tidak dihapus (soft delete)
+                $match: { isDeleted: false }
+            },
+            {
+                // 2. Kelompokkan berdasarkan field 'category'
+                $group: {
+                    _id: "$category",      // Nama kategori menjadi ID
+                    count: { $sum: 1 }     // Tambahkan 1 untuk setiap dokumen yang ditemukan
+                }
+            },
+            {
+                // 3. (Opsional) Urutkan dari jumlah terbanyak atau alfabetis
+                $sort: { count: -1 } 
+            },
+            {
+                // 4. (Opsional) Ubah nama field agar lebih rapi di JSON
+                $project: {
+                    _id: 0,
+                    name: "$_id",
+                    count: 1
+                }
+            }
+        ]);
+
         res.status(200).json(categories);
     } catch (error) {
         console.log(error);
         res.status(500).json({ message: "Internal server error" });
     }
-    next();
 }
 
 // @desc    Get my post
 // @route   GET /api/post/my-post
 // @access  Private
-const getMyPost = async (req, res, next) => {
+const getMyPost = async (req, res) => {
     try {
         const page = parseInt(req.query.page) || 1;
         const limit = parseInt(req.query.limit) || 10;
@@ -78,13 +106,12 @@ const getMyPost = async (req, res, next) => {
         console.log(error);
         res.status(500).json({ message: "Internal server error" });
     }
-    next();
 }
 
 // @desc    Get post by id
 // @route   GET /api/post/:id
-// @access  Private
-const getPostById = async (req, res, next) => {
+// @access  Public
+const getPostById = async (req, res) => {
     try {
         const post = await Post.findById(req.params.id);
         res.status(200).json(post);
@@ -92,13 +119,12 @@ const getPostById = async (req, res, next) => {
         console.log(error);
         res.status(500).json({ message: "Internal server error" });
     }
-    next();
 }
 
 // @desc    Create post
 // @route   POST /api/post
 // @access  Private
-const createPost = async (req, res, next) => {
+const createPost = async (req, res) => {
     try {
         const post = await Post.create({
             userId: req.user.id,
@@ -113,13 +139,12 @@ const createPost = async (req, res, next) => {
         console.log(error);
         res.status(500).json({ message: "Internal server error" });
     }
-    next();
 }
 
 // @desc    Update post
 // @route   PUT /api/post/:id
 // @access  Private
-const updatePost = async (req, res, next) => {
+const updatePost = async (req, res) => {
     try {
         const post = await Post.findById(req.params.id);
         // Check if post is exist
@@ -151,13 +176,12 @@ const updatePost = async (req, res, next) => {
         console.log(error);
         res.status(500).json({ message: "Internal server error" });
     }
-    next();
 }
 
 // @desc    Delete post
 // @route   DELETE /api/post/:id
 // @access  Private
-const deletePost = async (req, res, next) => {
+const deletePost = async (req, res) => {
     try {
         const post = await Post.findById(req.params.id);
         // Check if post is exist
@@ -180,7 +204,6 @@ const deletePost = async (req, res, next) => {
         console.log(error);
         res.status(500).json({ message: "Internal server error" });
     }
-    next();
 }
 
 
