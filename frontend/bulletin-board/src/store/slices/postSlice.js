@@ -7,10 +7,10 @@ export const fetchPosts = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       // Asumsi endpoint API Anda adalah GET /posts
-      const response = await axiosInstance.get('/posts');
+      const response = await axiosInstance.get('/post');
       
       // Mengembalikan data array postingan dari Express
-      return response.data; 
+      return response.data.data.posts; 
     } catch (error) {
       return rejectWithValue(
         error.response?.data?.message || 'Gagal mengambil data postingan dari server.'

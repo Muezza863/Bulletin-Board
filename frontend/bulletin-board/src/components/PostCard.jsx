@@ -49,12 +49,12 @@ const PostCard = ({ post }) => {
           <button className={styles.interaction}>
             <HeartIcon />
             {/* Tampilkan angka likes dari data */}
-            <span className={styles.count}>{post.likesCount || 0}</span>
+            <span className={styles.count}>{post.likeCount || 0}</span>
           </button>
           <button className={styles.interaction}>
             <CommentIcon />
             {/* Tampilkan angka comments dari data */}
-            <span className={styles.count}>{post.commentsCount || 0}</span>
+            <span className={styles.count}>{post.commentCount || 0}</span>
           </button>
         </div>
         <button className={styles.shareBtn}>
