@@ -1,0 +1,138 @@
+.appContainer {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: var(--bg-cream, #F4F7FE);
+  font-family: var(--font-family, 'Inter', sans-serif);
+}
+
+.mainLayout {
+  display: flex;
+  flex: 1;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+  gap: 20px;
+  padding: 20px 20px 80px 20px;
+}
+
+
+
+.mainContent {
+  flex: 1;
+  padding: 40px;
+  overflow-y: auto;
+}
+
+.header {
+  margin-bottom: 32px;
+}
+
+.pageTitle {
+  font-size: 34px;
+  font-weight: 700;
+  color: var(--primary-dark, #2B3674);
+  margin: 0 0 6px 0;
+}
+
+.pageSubtitle {
+  font-size: 15px;
+  color: var(--text-muted, #A3AED0);
+  margin: 0;
+  font-weight: 500;
+}
+
+.contentWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+}
+
+.bubblyCard {
+  background-color: #FFFFFF;
+  border-radius: 30px;
+  padding: 28px;
+  box-shadow: 0px 18px 40px rgba(112, 144, 176, 0.12);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.bubblyCardCentered {
+  background-color: #FFFFFF;
+  border-radius: 30px;
+  padding: 28px;
+  box-shadow: 0px 18px 40px rgba(112, 144, 176, 0.12);
+  display: flex;
+  align-items: center; 
+  justify-content: center;
+  min-height: 300px;
+}
+
+.bubblyCardEmpty {
+  background-color: #FFFFFF;
+  border-radius: 30px;
+  padding: 28px;
+  box-shadow: 0px 18px 40px rgba(112, 144, 176, 0.12);
+  display: flex;
+  align-items: center; 
+  justify-content: center;
+  min-height: 60vh;
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.iconBubblyBlue {
+  width: 56px; height: 56px; border-radius: 20px; background-color: var(--bg-cream, #F4F7FE); color: var(--primary-teal, #4318FF); display: flex; justify-content: center; align-items: center;
+}
+.iconBubblyGreen {
+  width: 56px; height: 56px; border-radius: 20px; background-color: #E6FAEE; color: #05CD99; display: flex; justify-content: center; align-items: center;
+}
+.iconBubblyOrange {
+  width: 56px; height: 56px; border-radius: 20px; background-color: #FFF4E5; color: #FFCE20; display: flex; justify-content: center; align-items: center;
+}
+
+.cardLabel {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text-muted, #A3AED0);
+}
+
+.cardValue {
+  font-size: 42px;
+  font-weight: 700;
+  color: var(--primary-dark, #2B3674);
+  margin: 0;
+  line-height: 1;
+}
+
+.cardFooter {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: auto;
+}
+
+.badgePremium {
+  padding: 6px 14px; border-radius: 9999px; background-color: var(--primary-teal, #4318FF); color: #FFF; font-size: 13px; font-weight: 700;
+}
+.badgeFree {
+  padding: 6px 14px; border-radius: 9999px; background-color: var(--bg-cream, #F4F7FE); color: var(--primary-teal, #4318FF); font-size: 13px; font-weight: 700;
+}
+
+.textMuted {
+  color: var(--text-muted, #A3AED0); font-size: 14px; font-weight: 500;
+}
+.textSuccess {
+  color: #05CD99; font-size: 14px; font-weight: 700;
+}

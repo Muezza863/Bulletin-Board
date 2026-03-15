@@ -6,6 +6,8 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import PostDetail from './pages/PostDetail';
+import AdminDashboard from './pages/AdminDashboard';
+import Profile from './pages/Profile';
 
 function App() {
   return (
@@ -16,7 +18,9 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         {/* :id adalah parameter dinamis, nantinya diisi dengan ID dari database Anda */}
-        <Route path="/post/:id" element={<PostDetail />} /> 
+        <Route path="/post/:id" element={<PostDetail />} />
+        <Route path="/admin" element={<AdminDashboard />} />
+        <Route path="/profile" element={<Profile />} />
       </Routes>
     </Router>
   );
