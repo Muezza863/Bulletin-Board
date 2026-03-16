@@ -1,9 +1,17 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { toggleLike } from '../store/slices/postSlice';
 import styles from './style/PostCard.module.css';
 
-// Ikon SVG sederhana agar tidak perlu menginstal library lain
-const HeartIcon = () => (
-  <svg className={styles.icon} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+// Ikon SVG dengan properti isLiked untuk mengatur fill dan stroke color
+const HeartIcon = ({ isLiked }) => (
+  <svg 
+    className={styles.icon} 
+    fill={isLiked ? "#ef4444" : "none"} 
+    stroke={isLiked ? "#ef4444" : "currentColor"} 
+    viewBox="0 0 24 24"
+  >
     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
   </svg>
 );
@@ -21,43 +29,80 @@ const ShareIcon = () => (
 );
 
 const PostCard = ({ post }) => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { user, token } = useSelector((state) => state.auth);
+  
+  const postId = post._id || post.id;
+  const isLiked = post.likes && user ? post.likes.includes(user.id) : false;
+
+  const handleCardClick = () => {
+    if (postId) {
+      navigate(`/post/${postId}`);
+    }
+  };
+
+  const handleLikeClick = (e) => {
+    e.stopPropagation();
+    if (!token) {
+      navigate('/login');
+      return;
+    }
+    dispatch(toggleLike({ postId, isLiked }));
+  };
+
   return (
-    <div className={styles.card}>
+    <div
+      className={styles.card}
+      onClick={handleCardClick}
+      style={{ cursor: postId ? 'pointer' : 'default' }}
+    >
       <div className={styles.header}>
         <div className={styles.userInfo}>
-          <img src={post.userAvatar} alt="avatar" className={styles.avatar} />
+          <img
+            src={`https://i.pravatar.cc/150?u=${post.userId?._id || post.userId || post._id}`}
+            alt="avatar"
+            className={styles.avatar}
+          />
           <div>
             <div className={styles.nameRow}>
-              <span className={styles.name}>{post.userName}</span>
-              {post.isPremium && <span className={styles.badge}>Premium</span>}
+              <span className={styles.name}>
+                {post.userId?.username || post.userName || 'Pengguna'}
+              </span>
+              {(post.userId?.role === 'premium' || post.isPremium) && <span className={styles.badge}>Premium</span>}
             </div>
             <div className={styles.time}>{post.timeAgo}</div>
           </div>
         </div>
-        <button className={styles.menuBtn}>•••</button>
+        <button className={styles.menuBtn} onClick={(e) => e.stopPropagation()}>
+          •••
+        </button>
       </div>
-      
+
+      {post.title && <h2 className={styles.title}>{post.title}</h2>}
       <p className={styles.content}>{post.content}</p>
-      
+
       {post.image && (
         <img src={post.image} alt="post content" className={styles.image} />
       )}
 
-      {/* Bagian Footer Interaksi Baru */}
+      {/* Bagian Footer Interaksi */}
       <footer className={styles.footer}>
         <div className={styles.leftInteractions}>
-          <button className={styles.interaction}>
-            <HeartIcon />
-            {/* Tampilkan angka likes dari data */}
+          <button 
+            className={styles.interaction} 
+            onClick={handleLikeClick}
+            style={{ color: isLiked ? '#ef4444' : 'inherit' }}
+          >
+            <HeartIcon isLiked={isLiked} />
             <span className={styles.count}>{post.likeCount || 0}</span>
           </button>
-          <button className={styles.interaction}>
+          <button className={styles.interaction} onClick={(e) => e.stopPropagation()}>
             <CommentIcon />
-            {/* Tampilkan angka comments dari data */}
             <span className={styles.count}>{post.commentCount || 0}</span>
           </button>
         </div>
-        <button className={styles.shareBtn}>
+        <button className={styles.shareBtn} onClick={(e) => e.stopPropagation()}>
           <ShareIcon />
         </button>
       </footer>
@@ -65,4 +110,4 @@ const PostCard = ({ post }) => {
   );
 };
 
-export default PostCard;
+export default PostCard;
