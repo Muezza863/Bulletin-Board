@@ -9,10 +9,12 @@ const router = express.Router();
 router.post("/register", middleware.authLimiter, controllers.register);
 router.post("/login", middleware.authLimiter, controllers.login);
 
-// Post routes
+// Post routes (public)
 router.get("/post", controllers.getAllPost);
-router.get("/post/:id", controllers.getPostById);
+// ⚠️ /post/category HARUS di atas /post/:id, agar tidak tertangkap sebagai :id
 router.get("/post/category", controllers.getAllCategory);
+router.get("/post/:id", controllers.getPostById);
+
 
 
 router.use(middleware.protect);

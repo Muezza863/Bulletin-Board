@@ -7,14 +7,14 @@ const getAllPost = async (req, res) => {
     try {
         const { page = 1, limit = 10, search, category } = req.query;
 
-        // 1. Kumpulkan semua filter pencarian ke dalam satu objek (Query)
+        // Kumpulkan semua filter pencarian ke dalam satu objek (Query)
         const query = {
             isDeleted: false,
             ...(search ? { title: { $regex: search, $options: 'i' } } : {}),
             ...(category ? { category: category } : {})
         };
 
-        // 2. Siapkan opsi paginasi (biarkan plugin yang mengurus skip, limit, dan sort)
+        // Siapkan opsi paginasi
         const options = {
             page: parseInt(page),
             limit: parseInt(limit),
@@ -22,7 +22,7 @@ const getAllPost = async (req, res) => {
             populate: { path: 'userId', select: 'username' },
             customLabels: {
                 totalDocs: 'totalData',
-                docs: 'posts', // Data array Anda akan masuk ke label ini
+                docs: 'posts',
                 page: 'currentPage',
                 nextPage: 'nextPage',
                 prevPage: 'prevPage',
@@ -30,17 +30,15 @@ const getAllPost = async (req, res) => {
             },
         };
 
-        // 3. Eksekusi paginate langsung dari Model (Post), bukan dari variabel array
         const result = await Post.paginate(query, options);
 
-        // 4. Kirim response ke React Anda
-        res.status(200).json({
+        return res.status(200).json({
             data: result
         });
 
     } catch (error) {
-        console.error("Error di getAllPost:", error);
-        res.status(500).json({ message: "Internal server error" });
+        console.error("[getAllPost]", error);
+        return res.status(500).json({ message: "Internal server error" });
     }
 };
 
@@ -50,35 +48,16 @@ const getAllPost = async (req, res) => {
 const getAllCategory = async (req, res) => {
     try {
         const categories = await Post.aggregate([
-            {
-                // 1. Hanya hitung postingan yang tidak dihapus (soft delete)
-                $match: { isDeleted: false }
-            },
-            {
-                // 2. Kelompokkan berdasarkan field 'category'
-                $group: {
-                    _id: "$category",      // Nama kategori menjadi ID
-                    count: { $sum: 1 }     // Tambahkan 1 untuk setiap dokumen yang ditemukan
-                }
-            },
-            {
-                // 3. (Opsional) Urutkan dari jumlah terbanyak atau alfabetis
-                $sort: { count: -1 } 
-            },
-            {
-                // 4. (Opsional) Ubah nama field agar lebih rapi di JSON
-                $project: {
-                    _id: 0,
-                    name: "$_id",
-                    count: 1
-                }
-            }
+            { $match: { isDeleted: false } },
+            { $group: { _id: "$category", count: { $sum: 1 } } },
+            { $sort: { count: -1 } },
+            { $project: { _id: 0, name: "$_id", count: 1 } }
         ]);
 
-        res.status(200).json(categories);
+        return res.status(200).json(categories);
     } catch (error) {
-        console.log(error);
-        res.status(500).json({ message: "Internal server error" });
+        console.error("[getAllCategory]", error);
+        return res.status(500).json({ message: "Internal server error" });
     }
 }
 
@@ -91,20 +70,23 @@ const getMyPost = async (req, res) => {
         const limit = parseInt(req.query.limit) || 10;
         const skip = (page - 1) * limit;
 
-        const myPosts = await Post.find({ userId: req.user.id }).sort({ createdAt: -1 }).skip(skip).limit(limit);
+        const myPosts = await Post.find({ userId: req.user.id })
+            .sort({ createdAt: -1 })
+            .skip(skip)
+            .limit(limit);
 
         const totalPosts = await Post.countDocuments({ userId: req.user.id });
         const totalPages = Math.ceil(totalPosts / limit);
 
-        res.status(200).json({
+        return res.status(200).json({
             data: myPosts,
             currentPage: page,
             totalData: totalPosts,
             totalPages: totalPages
         });
     } catch (error) {
-        console.log(error);
-        res.status(500).json({ message: "Internal server error" });
+        console.error("[getMyPost]", error);
+        return res.status(500).json({ message: "Internal server error" });
     }
 }
 
@@ -114,10 +96,13 @@ const getMyPost = async (req, res) => {
 const getPostById = async (req, res) => {
     try {
         const post = await Post.findById(req.params.id);
-        res.status(200).json(post);
+        if (!post || post.isDeleted) {
+            return res.status(404).json({ message: "Post not found" });
+        }
+        return res.status(200).json(post);
     } catch (error) {
-        console.log(error);
-        res.status(500).json({ message: "Internal server error" });
+        console.error("[getPostById]", error);
+        return res.status(500).json({ message: "Internal server error" });
     }
 }
 
@@ -126,18 +111,24 @@ const getPostById = async (req, res) => {
 // @access  Private
 const createPost = async (req, res) => {
     try {
+        const { title, content, category } = req.body;
+
+        if (!title || !content || !category) {
+            return res.status(400).json({ message: "Title, content, and category are required" });
+        }
+
         const post = await Post.create({
             userId: req.user.id,
-            title: req.body.title,
-            content: req.body.content,
-            category: req.body.category,
+            title,
+            content,
+            category,
             createdAt: Date.now(),
             updatedAt: Date.now()
         });
-        res.status(201).json(post);
+        return res.status(201).json(post);
     } catch (error) {
-        console.log(error);
-        res.status(500).json({ message: "Internal server error" });
+        console.error("[createPost]", error);
+        return res.status(500).json({ message: "Internal server error" });
     }
 }
 
@@ -147,9 +138,15 @@ const createPost = async (req, res) => {
 const updatePost = async (req, res) => {
     try {
         const post = await Post.findById(req.params.id);
-        // Check if post is exist
-        if (!post) {
+
+        // Check if post exists
+        if (!post || post.isDeleted) {
             return res.status(404).json({ message: "Post not found" });
+        }
+
+        // Check ownership SEBELUM melakukan perubahan apapun
+        if (post.userId.toString() !== req.user.id) {
+            return res.status(403).json({ message: "You are not authorized to update this post" });
         }
 
         // Check if the post was created within the last 24 hours
@@ -160,21 +157,19 @@ const updatePost = async (req, res) => {
             return res.status(400).json({ message: "You can only update your post within 24 hours of creating it." });
         }
 
-        // Just update post content
+        if (!req.body.content) {
+            return res.status(400).json({ message: "Content is required" });
+        }
+
+        // Update post content
         post.content = req.body.content;
         post.updatedAt = Date.now();
         await post.save();
 
-        res.status(200).json({ message: "Post updated successfully" });
-
-
-        // Check if the post was created by the authenticated user
-        if (post.id !== req.user.id) {
-            return res.status(403).json({ message: "You are not authorized to update this post" });
-        }
+        return res.status(200).json({ message: "Post updated successfully" });
     } catch (error) {
-        console.log(error);
-        res.status(500).json({ message: "Internal server error" });
+        console.error("[updatePost]", error);
+        return res.status(500).json({ message: "Internal server error" });
     }
 }
 
@@ -184,25 +179,26 @@ const updatePost = async (req, res) => {
 const deletePost = async (req, res) => {
     try {
         const post = await Post.findById(req.params.id);
-        // Check if post is exist
-        if (!post) {
+
+        // Check if post exists
+        if (!post || post.isDeleted) {
             return res.status(404).json({ message: "Post not found" });
         }
 
-        // Check if the post was created by the authenticated user
-        if (post.id !== req.user.id) {
+        // Check ownership menggunakan userId (bukan post.id)
+        if (post.userId.toString() !== req.user.id) {
             return res.status(403).json({ message: "You are not authorized to delete this post" });
         }
 
-        // Just delete post
+        // Soft delete
         post.isDeleted = true;
         await post.save();
 
-        res.status(200).json({ message: "Post deleted successfully" });
+        return res.status(200).json({ message: "Post deleted successfully" });
         
     } catch (error) {
-        console.log(error);
-        res.status(500).json({ message: "Internal server error" });
+        console.error("[deletePost]", error);
+        return res.status(500).json({ message: "Internal server error" });
     }
 }
 

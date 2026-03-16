@@ -7,16 +7,24 @@ const createToken = (id, role) => {
 }
 
 // @desc    Register
-// @route   POST /api/auth/register
+// @route   POST /api/register
 // @access  Public
-const register = async (req, res, next) => {
+const register = async (req, res) => {
     try {
         const { username, fullname, email, password } = req.body;
 
-        // Check if user already exists
-        const user = await User.findOne({ username });
-        if (user) {
-            return res.status(400).json({ message: "User already exists" });
+        // Validasi input
+        if (!username || !fullname || !email || !password) {
+            return res.status(400).json({ message: "All fields are required" });
+        }
+
+        // Check if user already exists by username or email
+        const existingUser = await User.findOne({ $or: [{ username }, { email }] });
+        if (existingUser) {
+            if (existingUser.username === username) {
+                return res.status(400).json({ message: "Username already taken" });
+            }
+            return res.status(400).json({ message: "Email already registered" });
         }
 
         // Hash password
@@ -34,32 +42,41 @@ const register = async (req, res, next) => {
 
         // Create token
         const token = createToken(newUser._id, newUser.role);
-        res.status(201).json({ message: "User created successfully", token });
+        return res.status(201).json({ message: "User created successfully", token });
     } catch (error) {
-        console.log(error);
-        res.status(500).json({ message: "Internal server error" });
+        console.error("[register]", error);
+        return res.status(500).json({ message: "Internal server error" });
     }
-    next();
 }
 
 // @desc    Login
-// @route   POST /api/auth/login
+// @route   POST /api/login
 // @access  Public
-const login = async (req, res, next) => {
+const login = async (req, res) => {
     try {
         const { username, password } = req.body;
+
+        // Validasi input
+        if (!username || !password) {
+            return res.status(400).json({ message: "Username and password are required" });
+        }
+
+        // Cek user ada dulu sebelum bcrypt.compare
         const user = await User.findOne({ username });
+        if (!user) {
+            return res.status(401).json({ message: "Invalid password or username not found" });
+        }
 
         // Check if password is valid
         const isPasswordValid = await bcrypt.compare(password, user.password);
-        if (!isPasswordValid || !user) {
+        if (!isPasswordValid) {
             return res.status(401).json({ message: "Invalid password or username not found" });
         }
         
         // Create token
         const token = createToken(user._id, user.role);
 
-        res.status(200).json({ 
+        return res.status(200).json({ 
             message: "User logged in successfully",
             token,
             user: {
@@ -69,10 +86,9 @@ const login = async (req, res, next) => {
             }
         });
     } catch (error) {
-        console.log(error);
-        res.status(500).json({ message: "Internal server error" });
+        console.error("[login]", error);
+        return res.status(500).json({ message: "Internal server error" });
     }
-    next();
 }
 
 export { register, login };
