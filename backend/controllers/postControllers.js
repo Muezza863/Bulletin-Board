@@ -19,7 +19,10 @@ const getAllPost = async (req, res) => {
             page: parseInt(page),
             limit: parseInt(limit),
             sort: { createdAt: -1 },
-            populate: { path: 'userId', select: 'username' },
+            populate: [
+                { path: 'userId', select: 'username role' },
+                { path: 'commentCount' } // Populate the virtual property
+            ],
             customLabels: {
                 totalDocs: 'totalData',
                 docs: 'posts',
@@ -95,7 +98,7 @@ const getMyPost = async (req, res) => {
 // @access  Public
 const getPostById = async (req, res) => {
     try {
-        const post = await Post.findById(req.params.id);
+        const post = await Post.findById(req.params.id).populate('userId', 'username role');
         if (!post || post.isDeleted) {
             return res.status(404).json({ message: "Post not found" });
         }

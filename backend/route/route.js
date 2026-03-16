@@ -14,6 +14,7 @@ router.get("/post", controllers.getAllPost);
 // ⚠️ /post/category HARUS di atas /post/:id, agar tidak tertangkap sebagai :id
 router.get("/post/category", controllers.getAllCategory);
 router.get("/post/:id", controllers.getPostById);
+router.get("/post/:postId/comment", controllers.getCommentByPostId);
 
 
 
@@ -26,6 +27,11 @@ router.put("/post/:id", middleware.checkQuota, upload.array("file", 2), controll
 router.delete("/post/:id", controllers.deletePost);
 router.post("/post/:id/like", controllers.likePost);
 router.post("/post/:id/unlike", controllers.unlikePost);
+
+// Comment routes
+router.post("/post/:postId/comment", controllers.createComment);
+router.put("/comment/:id", controllers.updateComment);
+router.delete("/comment/:id", controllers.deleteComment);
 
 
 // Profile routes

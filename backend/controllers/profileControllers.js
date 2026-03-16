@@ -29,6 +29,7 @@ const getProfile = async (req, res) => {
 
         return res.status(200).json({
             data: {
+                id: user._id,
                 username: user.username,
                 fullname: user.fullname,
                 email: user.email,

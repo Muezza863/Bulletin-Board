@@ -12,7 +12,7 @@ const getCommentByPostId = async (req, res) => {
             page: parseInt(page),
             limit: 10,
             sort: { createdAt: -1 },
-            populate: { path: 'userId', select: 'username' },
+            populate: { path: 'userId', select: 'username role' },
             customLabels: {
                 totalDocs: 'totalData',
                 docs: 'comments'

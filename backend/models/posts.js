@@ -52,7 +52,17 @@ const postSchema = new Schema({
         default: Date.now
     }
 }, {
-    timestamps: true
+    timestamps: true,
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true }
+});
+
+// Set virtual properties
+postSchema.virtual('commentCount', {
+    ref: 'Comment', // The model to use
+    localField: '_id', // Find comments where `localField`
+    foreignField: 'postId', // is equal to `foreignField`
+    count: true // And only get the number of docs
 });
 
 postSchema.plugin(mongoosePaginate);

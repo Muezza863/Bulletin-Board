@@ -80,6 +80,7 @@ const login = async (req, res) => {
             message: "User logged in successfully",
             token,
             user: {
+                id: user._id,
                 fullname: user.fullname,
                 username: user.username,
                 role: user.role
