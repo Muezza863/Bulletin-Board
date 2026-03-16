@@ -80,7 +80,7 @@ const Login = () => {
           <p className={styles.subtitle}>Please enter your details to sign in</p>
         </div>
 
-        <form className={styles.form} onSubmit={(e) => e.preventDefault()}>
+        <form className={styles.form} onSubmit={handleSubmit}>
           <div className={styles.formGroup}>
             <label className={styles.label}>Username</label>
             <input 
@@ -121,7 +121,7 @@ const Login = () => {
 
           </div>
 
-          <button type="submit" className={styles.loginBtn} disabled={isLoading} onClick={handleSubmit}>
+          <button type="submit" className={styles.loginBtn} disabled={isLoading}>
             {isLoading ? 'Signing In...' : 'Sign In'}
           </button>
           

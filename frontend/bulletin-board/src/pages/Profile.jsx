@@ -94,7 +94,7 @@ const Profile = () => {
 
               <div className={styles.statItem}>
                 <div className={styles.statValue}>
-                   {quotaStats?.limit === null || quotaStats?.limit === undefined || quotaStats?.limit === "Infinity" 
+                   {(quotaStats?.limit === null || quotaStats?.limit === undefined)
                      ? <span className={styles.infinityIcon}>∞</span> 
                      : quotaStats?.limit}
                 </div>
@@ -103,7 +103,7 @@ const Profile = () => {
 
               <div className={`${styles.statItem} ${styles.fullWidth}`}>
                 <div className={styles.statValue}>
-                   {quotaStats?.remaining === null || quotaStats?.remaining === undefined || quotaStats?.remaining === "Infinity" 
+                   {(quotaStats?.remaining === null || quotaStats?.remaining === undefined)
                      ? <span className={styles.infinityIcon}>∞</span> 
                      : quotaStats?.remaining}
                 </div>
